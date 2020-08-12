@@ -24,12 +24,7 @@ tags:
   - name: usuario
     description: Tudo sobre clientes
     externalDocs:
-      description: Find out more about our store
-      url: 'http://swagger.io'
-  - name: endereco
-    description: Tudo sobre endereco
-    externalDocs:
-      description: Find out more about our store
+      description: Find out more 
       url: 'http://swagger.io'
 schemes:
   - https
@@ -62,53 +57,14 @@ paths:
         - acme_auth:
             - 'write:acme'
             - 'read:acme'
-    put:
-      tags:
-        - caixa
-      summary: Atualiza fatura
-      description: ''
-      operationId: updateFatura
-      consumes:
-        - application/json
-        - application/xml
-      produces:
-        - application/xml
-        - application/json
-      parameters:
-        - in: body
-          name: body
-          description: Fatura
-          required: true
-          schema:
-            $ref: '#/definitions/Fatura'
-      responses:
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Fatura not found
-        '405':
-          description: Validation exception
-      security:
-        - acme_auth:
-            - 'write:acme'
-            - 'read:acme'
-  '/caixa/{faturaId}':
     get:
       tags:
         - caixa
-      summary: Fatura por ID
-      description: Returns a single pet
-      operationId: getFaturaById
+      summary: Gel all Fatura
+      operationId: getAllFatura
       produces:
         - application/xml
         - application/json
-      parameters:
-        - name: faturaId
-          in: path
-          description: ID of pet to return
-          required: true
-          type: integer
-          format: int64
       responses:
         '200':
           description: successful operation
@@ -120,70 +76,54 @@ paths:
           description: Fatura not found
       security:
         - api_key: []
-    post:
+  '/caixa/{codigo}':
+    get:
       tags:
         - caixa
-      summary: Atualiza fatura
-      description: ''
-      operationId: updateFaturaWithForm
-      consumes:
-        - application/x-www-form-urlencoded
+      summary: Fatura por codigo
+      description: Returns a single pet
+      operationId: getFaturaByCodigo
       produces:
         - application/xml
         - application/json
       parameters:
-        - name: faturaId
-          in: path
-          description: Id
+        - in: path
+          name: codigo
           required: true
-          type: integer
-          format: int64
-        - name: codigo
-          in: formData
-          description: Codigo
-          required: false
           type: string
       responses:
-        '405':
-          description: Invalid input
-      security:
-        - acme_auth:
-            - 'write:acme'
-            - 'read:acme'
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Fatura'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Fatura not found
     delete:
       tags:
         - caixa
-      summary: Exclui fatura
+      summary: Exclui fatura por codigo
       description: ''
-      operationId: deleteFatura
+      operationId: deleteFaturaCodigo
       produces:
         - application/xml
         - application/json
       parameters:
-        - name: api_key
-          in: header
-          required: false
-          type: string
-        - name: faturaId
+        - name: codigo
           in: path
-          description: Fatura id to delete
           required: true
-          type: integer
-          format: int64
+          type: string
       responses:
         '400':
           description: Invalid ID supplied
         '404':
           description: Fatura not found
-      security:
-        - acme_auth:
-            - 'write:acme'
-            - 'read:acme'
   /servico/instalacao:
     post:
       tags:
         - servico
-      summary: Instalacao
+      summary: Criar Instalacao
       description: ''
       operationId: placeInstalacao
       produces:
@@ -192,7 +132,7 @@ paths:
       parameters:
         - in: body
           name: body
-          description: Instalacao
+          description: Criar Instalacao
           required: true
           schema:
             $ref: '#/definitions/Instalacao'
@@ -203,27 +143,15 @@ paths:
             $ref: '#/definitions/Instalacao'
         '400':
           description: Invalid Instalacao
-  '/servico/instalacao/{instalacaoId}':
     get:
       tags:
         - servico
-      summary: Find Instalacao by ID
-      description: >-
-        For valid response try integer IDs with value >= 1 and <= 10.        
-        Other values will generated exceptions
-      operationId: getInstalacaoById
+      summary: Get all Instalacao
+      description: ''
+      operationId: getAllInstalacao
       produces:
         - application/xml
         - application/json
-      parameters:
-        - name: instalacaoId
-          in: path
-          description: ID of pet that needs to be fetched
-          required: true
-          type: integer
-          maximum: 10
-          minimum: 1
-          format: int64
       responses:
         '200':
           description: successful operation
@@ -233,25 +161,87 @@ paths:
           description: Invalid ID supplied
         '404':
           description: Order not found
+  '/servico/instalacao/{codigo}':
+    get:
+      tags:
+        - servico
+      summary: Get instalacao por codigo
+      description: ''
+      operationId: getInstalacaoByCodigo
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - name: codigo
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Instalacao'
+        '400':
+          description: Invalid codigo supplied
+        '404':
+          description: Instalacao not found
     delete:
       tags:
         - servico
-      summary: Delete purchase Instalacao by ID
-      description: >-
-        For valid response try integer IDs with positive integer value.        
-        Negative or non-integer values will generate API errors
+      summary: Delete Instalacao por codigo
+      description: ''
       operationId: deleteInstalacao
       produces:
         - application/xml
         - application/json
       parameters:
-        - name: instalacaoId
+        - name: codigo
           in: path
-          description: ID of the Instalacao that needs to be deleted
+          required: true
+          type: string
+      responses:
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Instalacao not found
+  '/servico/instalacao/cliente/{cpf}':
+    get:
+      tags:
+        - servico
+      summary: Get instalacao por cpf
+      description: ''
+      operationId: getInstalacaoByCpf
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - name: cpf
+          in: path
           required: true
           type: integer
-          minimum: 1
-          format: int64
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Instalacao'
+        '400':
+          description: Invalid codigo supplied
+        '404':
+          description: Instalacao not found
+    delete:
+      tags:
+        - servico
+      summary: Delete Instalacao por cpf
+      description: ''
+      operationId: deleteInstalacaoCpf
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - name: cpf
+          in: path
+          required: true
+          type: integer
       responses:
         '400':
           description: Invalid ID supplied
@@ -277,62 +267,36 @@ paths:
       responses:
         default:
           description: successful operation
-  /usuario/createWithArray:
-    post:
-      tags:
-        - usuario
-      summary: Creates list of users with given input array
-      description: ''
-      operationId: createusuariosWithArrayInput
-      produces:
-        - application/xml
-        - application/json
-      parameters:
-        - in: body
-          name: body
-          description: List of user object
-          required: true
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Cliente'
-      responses:
-        default:
-          description: successful operation
-  /usuario/createWithList:
-    post:
-      tags:
-        - usuario
-      summary: Creates list of users with given input array
-      description: ''
-      operationId: createusuariosWithListInput
-      produces:
-        - application/xml
-        - application/json
-      parameters:
-        - in: body
-          name: body
-          description: List of user object
-          required: true
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Cliente'
-      responses:
-        default:
-          description: successful operation
-  '/usuario/{nome}':
     get:
       tags:
         - usuario
-      summary: Get user by user name
+      summary: Get all users
       description: ''
-      operationId: getusuarioByName
+      operationId: getAllUsers
+      produces:
+        - application/xml
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Cliente'
+        '400':
+          description: Invalid nome supplied
+        '404':
+          description: usuario not found
+  '/usuario/{cpf}':
+    get:
+      tags:
+        - usuario
+      summary: Get user by user cpf
+      description: ''
+      operationId: getusuarioByCpf
       produces:
         - application/xml
         - application/json
       parameters:
-        - name: nome
+        - name: cpf
           in: path
           description: 'The name that needs to be fetched. Use user1 for testing. '
           required: true
@@ -356,7 +320,7 @@ paths:
         - application/xml
         - application/json
       parameters:
-        - name: nome
+        - name: cpf
           in: path
           description: name that need to be updated
           required: true
@@ -382,7 +346,7 @@ paths:
         - application/xml
         - application/json
       parameters:
-        - name: nome
+        - name: cpf
           in: path
           description: The name that needs to be deleted
           required: true
@@ -392,150 +356,6 @@ paths:
           description: Invalid nome supplied
         '404':
           description: usuario not found
-  /endereco:
-    post:
-      tags:
-        - endereco
-      summary: Adicionar novo endereco
-      description: ''
-      operationId: addEndereco
-      consumes:
-        - application/json
-        - application/xml
-      produces:
-        - application/xml
-        - application/json
-      parameters:
-        - in: body
-          name: body
-          description: Endereco a ser adicionado
-          required: true
-          schema:
-            $ref: '#/definitions/Endereco'
-      responses:
-        '405':
-          description: Invalid input
-      security:
-        - acme_auth:
-            - 'write:acme'
-            - 'read:acme'
-    put:
-      tags:
-        - endereco
-      summary: Atualiza endereco
-      description: ''
-      operationId: updateEndereco
-      consumes:
-        - application/json
-        - application/xml
-      produces:
-        - application/xml
-        - application/json
-      parameters:
-        - in: body
-          name: body
-          description: Endereco
-          required: true
-          schema:
-            $ref: '#/definitions/Endereco'
-      responses:
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Endereco not found
-        '405':
-          description: Validation exception
-      security:
-        - acme_auth:
-            - 'write:acme'
-            - 'read:acme'
-  '/endereco/{enderecoId}':
-    get:
-      tags:
-        - endereco
-      summary: Endereco por ID
-      description: Returns a single pet
-      operationId: getEnderecoById
-      produces:
-        - application/xml
-        - application/json
-      parameters:
-        - name: enderecoId
-          in: path
-          description: ID of pet to return
-          required: true
-          type: integer
-          format: int64
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            $ref: '#/definitions/Endereco'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Fatura not found
-      security:
-        - api_key: []
-    post:
-      tags:
-        - endereco
-      summary: Atualiza endereco
-      description: ''
-      operationId: updateEnderecoWithForm
-      consumes:
-        - application/x-www-form-urlencoded
-      produces:
-        - application/xml
-        - application/json
-      parameters:
-        - name: enderecoId
-          in: path
-          description: Id
-          required: true
-          type: integer
-          format: int64
-        - name: cidade
-          in: formData
-          description: cidade
-          required: false
-          type: string
-      responses:
-        '405':
-          description: Invalid input
-      security:
-        - acme_auth:
-            - 'write:acme'
-            - 'read:acme'
-    delete:
-      tags:
-        - endereco
-      summary: Exclui endereco
-      description: ''
-      operationId: deleteEndereco
-      produces:
-        - application/xml
-        - application/json
-      parameters:
-        - name: api_key
-          in: header
-          required: false
-          type: string
-        - name: enderecoId
-          in: path
-          description: endereco id to delete
-          required: true
-          type: integer
-          format: int64
-      responses:
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Endereco not found
-      security:
-        - acme_auth:
-            - 'write:acme'
-            - 'read:acme'
 securityDefinitions:
   acme_auth:
     type: oauth2
